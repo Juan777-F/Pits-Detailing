@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar sesión | Piets Lavado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'lavadero_app/css/styles.css' %}" />
+  </head>
+  <body class="login-body">
+    <main class="login-shell">
+      <a class="landing-brand login-brand" href="{% url 'landing' %}"><span class="brand-icon">P</span><strong>Piets Lavado</strong></a>
+      <section class="login-card">
+        <div class="login-heading">
+          <span class="login-lock"><i class="fa-solid fa-lock"></i></span>
+          <span class="kicker">Acceso seguro</span>
+          <h1>Bienvenido</h1>
+          <p>Selecciona tu perfil e ingresa con tu cuenta.</p>
+        </div>
+        <div class="role-switch" role="group" aria-label="Tipo de cuenta">
+          <a class="{% if selected_role == 'admin' %}active{% endif %}" href="{% url 'login' %}?rol=admin"><i class="fa-solid fa-user-tie"></i> Administrador</a>
+          <a class="{% if selected_role == 'empleado' %}active{% endif %}" href="{% url 'login' %}?rol=empleado"><i class="fa-solid fa-user-gear"></i> Empleado</a>
+        </div>
+        {% if messages %}
+          <div class="form-messages" role="alert">
+            {% for message in messages %}<p class="{{ message.tags }}">{{ message }}</p>{% endfor %}
+          </div>
+        {% endif %}
+        <form class="login-form" method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <input type="hidden" name="role" value="{{ selected_role }}" />
+          <label for="username">Usuario</label>
+          <input id="username" name="username" type="text" autocomplete="username" placeholder="Tu usuario" required autofocus />
+          <label for="password">Contraseña</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required />
+          <button class="button primary login-submit" type="submit">Iniciar sesión <i class="fa-solid fa-arrow-right"></i></button>
+        </form>
+        {% if setup_available %}
+          <a class="first-admin-link" href="{% url 'initial_admin_setup' %}"><i class="fa-solid fa-shield-halved"></i> Configurar la primera cuenta de administrador</a>
+        {% else %}
+          <p class="login-help"><i class="fa-solid fa-circle-info"></i> El administrador crea las cuentas de empleado.</p>
+        {% endif %}
+      </section>
+      <a class="back-home" href="{% url 'landing' %}"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
+    </main>
+  </body>
+</html>

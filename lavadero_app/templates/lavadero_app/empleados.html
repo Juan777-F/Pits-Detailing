@@ -1,0 +1,32 @@
+{% extends 'lavadero_app/base.html' %}
+
+{% block title %}Empleados | Piets Lavado{% endblock %}
+{% block page_title %}Empleados{% endblock %}
+
+{% block content %}
+<section class="page-shell">
+  <div class="page-header"><div><span class="kicker">Acceso al sistema</span><h2>Gestionar empleados</h2></div></div>
+  <div class="employee-layout">
+    <section class="profile-panel">
+      <div><span class="kicker">Nueva cuenta</span><h2>Crear empleado</h2></div>
+      <form method="post" class="employee-form">
+        {% csrf_token %}
+        <div class="field-group"><label for="employee-name">Nombre completo</label><input id="employee-name" name="first_name" type="text" maxlength="150" required /></div>
+        <div class="field-group"><label for="employee-username">Usuario</label><input id="employee-username" name="username" type="text" maxlength="150" autocomplete="off" required /></div>
+        <div class="field-group"><label for="employee-password">Contraseña inicial</label><input id="employee-password" name="password" type="password" autocomplete="new-password" required /><small>Debe cumplir las reglas de contraseña configuradas en el sistema.</small></div>
+        <button class="button primary" type="submit"><i class="fa-solid fa-user-plus"></i> Crear cuenta</button>
+      </form>
+    </section>
+    <section class="profile-panel">
+      <div><span class="kicker">Equipo</span><h2>Cuentas de empleado</h2></div>
+      <div class="employee-list">
+        {% for employee in employees %}
+          <div class="employee-row"><span class="avatar">{{ employee.first_name|default:employee.username|slice:":1"|upper }}</span><span><strong>{{ employee.get_full_name|default:employee.username }}</strong><small>@{{ employee.username }} · {% if employee.is_active %}Activo{% else %}Inactivo{% endif %}</small></span></div>
+        {% empty %}
+          <p class="empty-state">Todavía no hay cuentas de empleado.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'lavadero_app/base.html' %}
+
+{% block title %}Mi perfil | Piets Lavado{% endblock %}
+{% block page_title %}Mi perfil{% endblock %}
+
+{% block content %}
+<section class="page-shell profile-page">
+  <div class="profile-panel">
+    <div><span class="kicker">Cuenta</span><h2>Mi perfil</h2></div>
+    <div class="profile-user-row">
+      <div class="avatar large">{{ request.user.first_name|default:request.user.username|slice:":1"|upper }}</div>
+      <div class="user-meta">
+        <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+        <p>{{ request.user.email|default:"Correo no configurado" }} · @{{ request.user.username }}</p>
+      </div>
+      <span class="admin-badge-small">{% if is_admin %}ADMINISTRADOR{% else %}EMPLEADO{% endif %}</span>
+    </div>
+    <nav class="profile-menu">
+      <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i> Mi panel <span class="arrow">›</span></a>
+      <a href="{% url 'jornada' %}"><i class="fa-solid fa-car-side"></i> Jornada y vehículos <span class="arrow">›</span></a>
+      <a href="{% url 'pagos' %}"><i class="fa-solid fa-wallet"></i> Pagos <span class="arrow">›</span></a>
+      {% if is_admin %}<a href="{% url 'estadisticas' %}"><i class="fa-solid fa-chart-line"></i> Estadísticas <span class="arrow">›</span></a>{% endif %}
+    </nav>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button class="button danger wide" type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

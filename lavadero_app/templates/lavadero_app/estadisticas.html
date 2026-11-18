@@ -1,0 +1,34 @@
+{% extends 'lavadero_app/base.html' %}
+
+{% block title %}Estadísticas | Piets Lavado{% endblock %}
+{% block page_title %}Estadísticas{% endblock %}
+
+{% block content %}
+<section class="page-shell stats-page">
+  <div class="page-header">
+    <div><span class="kicker">Rendimiento</span><h2>Indicadores del negocio</h2></div>
+  </div>
+  <div class="stats-cards">
+    <article class="big-stat primary"><span>Ingresos reales de hoy</span><strong>{{ income }}</strong></article>
+    <article class="big-stat light"><span>Saldo por cobrar</span><strong>{{ outstanding }}</strong></article>
+  </div>
+  <div class="info-grid">
+    <article class="mini-card"><span>Vehículos de hoy</span><strong>{{ vehicles_today }}</strong></article>
+    <article class="mini-card"><span>Servicios terminados</span><strong>{{ completed_today }}</strong></article>
+    <article class="mini-card"><span>Valor de servicios hoy</span><strong>{{ billed_today }}</strong></article>
+    <article class="mini-card"><span>Cancelados hoy</span><strong>{{ cancelled_today }}</strong></article>
+  </div>
+  <div class="chart-panel">
+    <div class="chart-header"><h3>Pagos recibidos, últimos 7 días</h3><span>Basado en pagos registrados</span></div>
+    <div class="bar-chart">
+      {% for bar in bars %}
+        <div class="bar-col">
+          <span class="bar-value">{{ bar.amount }}</span>
+          <div class="bar" style="height: {{ bar.height }}%;"></div>
+          <small>{{ bar.label }}</small>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

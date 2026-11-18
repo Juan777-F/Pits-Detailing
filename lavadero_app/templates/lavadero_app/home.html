@@ -1,0 +1,98 @@
+{% extends 'lavadero_app/base.html' %}
+
+{% block title %}Panel | Piets Lavado{% endblock %}
+{% block page_title %}{% if is_employee %}Panel del empleado{% else %}Piets Lavado{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-shell dashboard-page">
+  <div class="page-header">
+    <div>
+      <span class="kicker">{% if is_employee %}Operación diaria{% else %}Resumen del negocio{% endif %}</span>
+      <h2>{% if is_employee %}Hola, {{ request.user.first_name|default:request.user.username }}{% else %}Jornada del día{% endif %}</h2>
+    </div>
+    <button class="button primary" type="button" data-open-modal>
+      <i class="fa-solid fa-plus"></i>
+      Registrar vehículo
+    </button>
+  </div>
+
+  <div class="stats-grid">
+    {% for stat in stats %}
+    <article class="stat-card">
+      <div class="stat-icon {% if stat.icon == 'car' %}car{% elif stat.icon == 'clock' %}clock{% elif stat.icon == 'check' %}check{% else %}warning{% endif %}">
+        <i class="fa-solid {% if stat.icon == 'car' %}fa-car-side{% elif stat.icon == 'clock' %}fa-clock{% elif stat.icon == 'check' %}fa-check{% else %}fa-exclamation{% endif %}"></i>
+      </div>
+      <div>
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% if not is_employee %}
+  <div class="summary-row">
+    <article class="summary-card primary">
+      <span>Ingresos del día</span>
+      <strong>{{ income_today }}</strong>
+      <small>Pagos recibidos hoy</small>
+    </article>
+    <article class="summary-card warning">
+      <span>Pendiente por cobrar</span>
+      <strong>{{ outstanding_total }}</strong>
+      <small>Saldo de todos los servicios</small>
+    </article>
+  </div>
+  {% endif %}
+
+  <div class="quick-access">
+    <h3>Accesos rápidos</h3>
+    <div class="quick-grid">
+      <button class="quick-card primary" type="button" data-open-modal><i class="fa-solid fa-plus"></i><span>Registrar vehículo</span></button>
+      <a class="quick-card" href="{% url 'jornada' %}"><i class="fa-solid fa-calendar-check"></i><span>Ver jornada</span></a>
+      <a class="quick-card" href="{% url 'pagos' %}"><i class="fa-solid fa-money-bill-wave"></i><span>Registrar pago</span></a>
+      {% if not is_employee %}<a class="quick-card" href="{% url 'estadisticas' %}"><i class="fa-solid fa-chart-column"></i><span>Estadísticas</span></a>{% endif %}
+    </div>
+  </div>
+
+  <section class="panel-card">
+    <div class="panel-head">
+      <div>
+        <span class="kicker">Operación actual</span>
+        <h3>Vehículos en la jornada</h3>
+      </div>
+      <a class="button ghost" href="{% url 'jornada' %}">Ver toda la jornada</a>
+    </div>
+
+    <div class="vehicle-list" data-search-list>
+      {% for item in vehicles %}
+      <article class="vehicle-card" data-search-text="{{ item.plate }} {{ item.owner }} {{ item.vehicle_name }} {{ item.service }}">
+        <div class="card-header">
+          <div class="plate-wrap">
+            <span class="plate">{{ item.plate }}</span>
+            <span class="type">{{ item.brand }}</span>
+          </div>
+          <span class="state-pill {{ item.status_kind }}">{{ item.status }}</span>
+        </div>
+
+        <h4>{{ item.vehicle_name }}</h4>
+        <p class="owner-name">{{ item.owner }}</p>
+        <p class="service-name">{{ item.service }}</p>
+
+        <div class="card-footer">
+          <div class="time"><i class="fa-regular fa-clock"></i> {{ item.time }}</div>
+          {% if item.paid %}
+          <span class="paid-status">Pagado</span>
+          {% else %}
+          <span class="unpaid-status">Saldo {{ item.amount }}</span>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+      {% if not vehicles %}
+        <p class="empty-state">Todavía no hay servicios registrados. Usa “Registrar vehículo” para comenzar.</p>
+      {% endif %}
+    </div>
+  </section>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'lavadero_app/base.html' %}
+
+{% block title %}Pagos | Piets Lavado{% endblock %}
+{% block page_title %}Pagos{% endblock %}
+
+{% block content %}
+<section class="page-shell payments-page">
+  <div class="page-header">
+    <div><span class="kicker">Cobranza</span><h2>Pagos y saldos</h2></div>
+  </div>
+  <div class="summary-row single">
+    <article class="summary-card primary large"><span>Saldo pendiente</span><strong>{{ outstanding_total }}</strong><small>Saldo calculado de servicios registrados</small></article>
+  </div>
+  <nav class="segmented-tabs" aria-label="Filtrar pagos">
+    <a class="tab-button {% if selected_status != 'pagado' %}active{% endif %}" href="{% url 'pagos' %}?estado=pendiente">Pendientes</a>
+    <a class="tab-button {% if selected_status == 'pagado' %}active{% endif %}" href="{% url 'pagos' %}?estado=pagado">Pagados</a>
+  </nav>
+  <div class="payments-list">
+    {% for row in rows %}
+      <article class="payment-card">
+        <div class="payment-top">
+          <div><h3>{{ row.job.plate }} · {{ row.job.vehicle_model }}</h3><p>{{ row.job.customer_name }} · {{ row.job.created_at|date:"d/m/Y H:i" }}</p></div>
+          <span class="state-pill {% if row.is_paid %}success{% else %}warning{% endif %}">{% if row.is_paid %}Pagado{% else %}Pendiente{% endif %}</span>
+        </div>
+        <div class="totals">
+          <div><span>Total</span><strong>{{ row.total }}</strong></div>
+          <div><span>Abonado</span><strong class="green">{{ row.paid }}</strong></div>
+          <div><span>Saldo</span><strong>{{ row.balance }}</strong></div>
+        </div>
+        {% if not row.is_paid %}
+          <form method="post" action="{% url 'payment_create' row.job.id %}" class="payment-action">
+            {% csrf_token %}
+            <label for="method-{{ row.job.id }}">Recibir pago</label>
+            <select id="method-{{ row.job.id }}" name="method" required>
+              <option value="cash">Efectivo</option>
+              <option value="transfer">Transferencia</option>
+              <option value="card">Tarjeta</option>
+            </select>
+            <button class="button primary compact" type="submit">Cobrar {{ row.balance }}</button>
+          </form>
+        {% endif %}
+      </article>
+    {% empty %}
+      <p class="empty-state">{% if selected_status == 'pagado' %}Aún no hay servicios pagados.{% else %}No hay pagos pendientes por registrar.{% endif %}</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

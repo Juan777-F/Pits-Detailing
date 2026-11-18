@@ -1,0 +1,42 @@
+{% extends 'lavadero_app/base.html' %}
+
+{% block title %}Jornada | Piets Lavado{% endblock %}
+{% block page_title %}Jornada{% endblock %}
+
+{% block content %}
+<section class="page-shell">
+  <div class="page-header">
+    <div><span class="kicker">Operación diaria</span><h2>Vehículos y servicios</h2></div>
+    <button class="button primary" type="button" data-open-modal><i class="fa-solid fa-plus"></i> Registrar vehículo</button>
+  </div>
+  <section class="content-panel">
+    <div class="section-top"><h2>Servicios activos y recientes</h2><span class="kicker">{{ jobs|length }} registros</span></div>
+    {% for job in jobs %}
+      <article class="jornada-item">
+        <div class="vehicle-line">
+          <span class="plate">{{ job.plate }}</span>
+          <span class="model">{{ job.vehicle_model }} · {{ job.customer_name }}</span>
+          <span class="state-pill {% if job.status == 'completed' %}success{% elif job.status == 'in_progress' %}info{% else %}warning{% endif %}">{{ job.get_status_display }}</span>
+        </div>
+        <div class="meta-row">
+          <span><i class="fa-regular fa-clock"></i> {{ job.created_at|date:"d/m/Y H:i" }} · {{ job.service_name }}</span>
+          <span>{{ job.vehicle_type }}</span>
+        </div>
+        <div class="cash-row">
+          <span>Saldo {{ job.balance|floatformat:0 }} COP</span>
+          <form method="post" action="{% url 'job_status' job.id %}" class="inline-form">
+            {% csrf_token %}
+            <label class="sr-only" for="status-{{ job.id }}">Estado de {{ job.plate }}</label>
+            <select id="status-{{ job.id }}" name="status">
+              {% for value, label in status_choices %}<option value="{{ value }}" {% if job.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+            </select>
+            <button class="button secondary compact" type="submit">Actualizar</button>
+          </form>
+        </div>
+      </article>
+    {% empty %}
+      <p class="empty-state">No hay vehículos registrados todavía. Registra el primero para iniciar la jornada.</p>
+    {% endfor %}
+  </section>
+</section>
+{% endblock %}

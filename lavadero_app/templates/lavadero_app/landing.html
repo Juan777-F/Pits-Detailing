@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piets Lavado | Control sencillo para tu autolavado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'lavadero_app/css/styles.css' %}" />
+  </head>
+  <body class="landing-body">
+    <header class="landing-nav">
+      <a class="landing-brand" href="{% url 'landing' %}">
+        <span class="brand-icon">P</span>
+        <strong>Piets Lavado</strong>
+      </a>
+      <nav aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#modulos">Módulos</a>
+      </nav>
+      <a class="landing-login" href="{% url 'login' %}?rol=admin">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        Iniciar sesión
+      </a>
+    </header>
+
+    <main>
+      <section class="landing-hero" id="inicio">
+        <div class="hero-content">
+          <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> Gestión clara para tu autolavado</span>
+          <h1>Tu negocio en orden.<br /><span>Cada servicio bajo control.</span></h1>
+          <p>Registra vehículos, organiza la jornada, controla pagos y consulta el movimiento de Piets Lavado desde un solo lugar.</p>
+          <div class="hero-actions">
+            <a class="button hero-primary" href="{% url 'login' %}?rol=admin">Entrar al panel <i class="fa-solid fa-arrow-right"></i></a>
+            <a class="button hero-secondary" href="#modulos">Conocer los módulos</a>
+          </div>
+          <div class="hero-points">
+            <span><i class="fa-solid fa-user-shield"></i> Acceso por roles</span>
+            <span><i class="fa-solid fa-mobile-screen"></i> Adaptable a celular</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-orbit orbit-one"></div>
+          <div class="hero-orbit orbit-two"></div>
+          <div class="hero-car"><i class="fa-solid fa-car-side"></i></div>
+          <div class="hero-spark spark-one"><i class="fa-solid fa-droplet"></i></div>
+          <div class="hero-spark spark-two"><i class="fa-solid fa-sparkles"></i></div>
+          <div class="hero-info-card">
+            <span class="hero-info-icon"><i class="fa-solid fa-check"></i></span>
+            <span><strong>Jornada organizada</strong><small>Vehículos y pagos en un solo panel</small></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-benefits" id="beneficios">
+        <div class="landing-section-heading">
+          <span class="kicker">Menos desorden, más control</span>
+          <h2>Todo el equipo trabaja con la misma información</h2>
+          <p>El administrador controla el negocio y el empleado se enfoca en la operación diaria.</p>
+        </div>
+        <div class="benefit-grid">
+          <article class="benefit-card"><i class="fa-solid fa-list-check"></i><h3>Jornada en vivo</h3><p>Registra los vehículos y actualiza cada servicio conforme avanza el trabajo.</p></article>
+          <article class="benefit-card"><i class="fa-solid fa-wallet"></i><h3>Pagos claros</h3><p>Consulta el saldo de cada servicio y guarda el método de pago utilizado.</p></article>
+          <article class="benefit-card"><i class="fa-solid fa-chart-line"></i><h3>Seguimiento del negocio</h3><p>El administrador revisa ingresos registrados y actividad reciente.</p></article>
+        </div>
+      </section>
+
+      <section class="landing-modules" id="modulos">
+        <div>
+          <span class="kicker">Empieza en segundos</span>
+          <h2>Una entrada para cada integrante del equipo</h2>
+          <p>Elige tu rol en el inicio de sesión. Cada cuenta verá las herramientas que necesita.</p>
+        </div>
+        <div class="role-cards">
+          <a class="role-card" href="{% url 'login' %}?rol=admin"><span class="role-icon"><i class="fa-solid fa-user-tie"></i></span><span><strong>Administrador</strong><small>Panel, jornada, pagos, estadísticas y gestión de empleados.</small></span><i class="fa-solid fa-arrow-right"></i></a>
+          <a class="role-card" href="{% url 'login' %}?rol=empleado"><span class="role-icon employee"><i class="fa-solid fa-user-gear"></i></span><span><strong>Empleado</strong><small>Jornada, registro de vehículos y cobro de servicios.</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+    </main>
+    <footer class="landing-footer"><a class="landing-brand" href="{% url 'landing' %}"><span class="brand-icon">P</span><strong>Piets Lavado</strong></a><span>Control simple para el trabajo de cada día.</span></footer>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Piets Lavado{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'lavadero_app/css/styles.css' %}" />
+  </head>
+  <body class="admin-body">
+    <div class="dashboard-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand-block">
+          <div class="brand-icon">P</div>
+          <div class="brand-copy">
+            <h2>Piets Lavado</h2>
+            <small>GESTIÓN DEL AUTOLAVADO</small>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Navegación principal">
+          <a href="{% url 'home' %}" class="nav-link {% if page == 'home' %}active{% endif %}">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>Panel principal</span>
+          </a>
+          <a href="{% url 'jornada' %}" class="nav-link {% if page == 'jornada' %}active{% endif %}">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Jornada</span>
+          </a>
+          <a href="{% url 'pagos' %}" class="nav-link {% if page == 'pagos' %}active{% endif %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Pagos</span>
+          </a>
+          {% if request.user.is_staff or request.user.is_superuser %}
+            <a href="{% url 'estadisticas' %}" class="nav-link {% if page == 'estadisticas' %}active{% endif %}">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Estadísticas</span>
+            </a>
+            <a href="{% url 'employees' %}" class="nav-link {% if page == 'empleados' %}active{% endif %}">
+              <i class="fa-solid fa-users"></i>
+              <span>Empleados</span>
+            </a>
+          {% endif %}
+          <a href="{% url 'perfil' %}" class="nav-link {% if page == 'perfil' %}active{% endif %}">
+            <i class="fa-solid fa-user-circle"></i>
+            <span>Perfil</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-user">
+          <div class="user-mini">
+            <div class="avatar">{{ request.user.first_name|default:request.user.username|slice:":1"|upper }}</div>
+            <div>
+              <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+              <small>{% if request.user.is_staff or request.user.is_superuser %}Administrador{% else %}Empleado{% endif %}</small>
+            </div>
+          </div>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="logout-button" type="submit">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Cerrar sesión</span>
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <div class="main-panel">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button class="menu-toggle" type="button" aria-label="Abrir menú">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <span class="eyebrow">{% if request.user.is_staff or request.user.is_superuser %}Panel de administración{% else %}Panel de empleado{% endif %}</span>
+              <h1>{% block page_title %}Piets Lavado{% endblock %}</h1>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <label class="search-box" aria-label="Buscar registros">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input id="global-search" type="search" placeholder="Buscar vehículo, cliente o servicio" />
+            </label>
+
+            <button class="icon-button notification-button" type="button" aria-label="Notificaciones">
+              <i class="fa-solid fa-bell"></i>
+              {% if pending_payment_count %}<span class="badge-dot">{{ pending_payment_count }}</span>{% endif %}
+            </button>
+
+            <button class="profile-button" type="button" onclick="location.href='{% url 'perfil' %}'">
+              <span class="avatar small">{{ request.user.first_name|default:request.user.username|slice:":1"|upper }}</span>
+              <span class="profile-text">
+                <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+                <small>{% if request.user.is_staff or request.user.is_superuser %}Admin{% else %}Empleado{% endif %}</small>
+              </span>
+            </button>
+          </div>
+        </header>
+
+        <main class="content-area">
+          {% if messages %}
+            <div class="django-messages" role="status">
+              {% for message in messages %}<p class="django-message {{ message.tags }}">{{ message }}</p>{% endfor %}
+            </div>
+          {% endif %}
+          {% block content %}{% endblock %}
+        </main>
+      </div>
+    </div>
+
+    {% if page != 'empleados' %}
+      <button class="floating-action" id="quick-add-btn" type="button" aria-label="Registrar un vehículo">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    {% endif %}
+
+    <aside class="notification-panel" id="notification-panel" aria-live="polite">
+      <div class="panel-header">
+        <h3>Notificaciones</h3>
+        <button type="button" class="close-panel" data-close="notification-panel">×</button>
+      </div>
+      {% if pending_payment_count %}
+        <p><strong>{{ pending_payment_count }}</strong> servicios tienen saldo pendiente.</p>
+        <a class="button secondary" href="{% url 'pagos' %}">Revisar pagos</a>
+      {% else %}
+        <p>No tienes pagos pendientes por revisar.</p>
+      {% endif %}
+    </aside>
+
+    <div class="modal-backdrop" id="modal-backdrop" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-header">
+          <h3 id="modal-title">Registrar movimiento</h3>
+          <button type="button" class="close-panel" data-close="modal-backdrop">×</button>
+        </div>
+
+        <form id="quick-form" method="post" action="{% url 'job_create' %}">
+          {% csrf_token %}
+          <div class="field-group">
+            <label for="job-plate">Placa</label>
+            <input id="job-plate" name="plate" type="text" maxlength="10" placeholder="Ej. ABC123" required />
+          </div>
+          <div class="field-group">
+            <label for="job-customer">Nombre del cliente</label>
+            <input id="job-customer" name="customer_name" type="text" maxlength="120" required />
+          </div>
+          <div class="field-group">
+            <label for="job-vehicle-type">Tipo de vehículo</label>
+            <select id="job-vehicle-type" name="vehicle_type" required>
+              <option value="">Selecciona un tipo</option>
+              <option>Automóvil</option>
+              <option>Camioneta</option>
+              <option>Motocicleta</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="job-model">Marca y modelo / color</label>
+            <input id="job-model" name="vehicle_model" type="text" maxlength="100" placeholder="Ej. Mazda 3 gris" required />
+          </div>
+          <div class="field-group">
+            <label for="job-service">Servicio</label>
+            <input id="job-service" name="service_name" type="text" maxlength="120" placeholder="Ej. Lavado general" required />
+          </div>
+          <div class="field-group">
+            <label for="job-total">Valor del servicio (COP)</label>
+            <input id="job-total" name="total" type="number" min="1" step="1000" required />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="button secondary" data-close="modal-backdrop">Cancelar</button>
+            <button type="submit" class="button primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
+    {% block modal %}{% endblock %}
+    <script src="{% static 'lavadero_app/js/app.js' %}"></script>
+  </body>
+</html>
