@@ -1,43 +1,49 @@
 {% extends 'lavadero_app/base.html' %}
 
-{% block title %}Pagos | Piets Lavado{% endblock %}
+{% block title %}Pagos | Pits Detailing{% endblock %}
 {% block page_title %}Pagos{% endblock %}
 
 {% block content %}
 <section class="page-shell payments-page">
   <div class="page-header">
-    <div><span class="kicker">Cobranza</span><h2>Pagos y saldos</h2></div>
+    <div><span class="kicker">Cobranza</span><h2>Pagos y saldos</h2><p class="page-intro">Consulta lo pendiente, revisa los pagos recibidos y registra el cobro de cada servicio.</p></div>
   </div>
-  <div class="summary-row single">
-    <article class="summary-card primary large"><span>Saldo pendiente</span><strong>{{ outstanding_total }}</strong><small>Saldo calculado de servicios registrados</small></article>
+  <div class="payment-metrics">
+    <article class="payment-metric due"><span><i class="fa-solid fa-hourglass-half"></i> Saldo por cobrar</span><strong>{{ outstanding_total }}</strong><small>{{ pending_count }} servicio{% if pending_count != 1 %}s{% endif %} pendiente{% if pending_count != 1 %}s{% endif %}</small></article>
+    <article class="payment-metric collected"><span><i class="fa-solid fa-circle-check"></i> Total recaudado</span><strong>{{ collected_total }}</strong><small>{{ paid_count }} servicio{% if paid_count != 1 %}s{% endif %} pagado{% if paid_count != 1 %}s{% endif %}</small></article>
   </div>
   <nav class="segmented-tabs" aria-label="Filtrar pagos">
-    <a class="tab-button {% if selected_status != 'pagado' %}active{% endif %}" href="{% url 'pagos' %}?estado=pendiente">Pendientes</a>
-    <a class="tab-button {% if selected_status == 'pagado' %}active{% endif %}" href="{% url 'pagos' %}?estado=pagado">Pagados</a>
+    <a class="tab-button {% if selected_status != 'pagado' %}active{% endif %}" href="{% url 'pagos' %}?estado=pendiente">Por cobrar <span>{{ pending_count }}</span></a>
+    <a class="tab-button {% if selected_status == 'pagado' %}active{% endif %}" href="{% url 'pagos' %}?estado=pagado">Pagados <span>{{ paid_count }}</span></a>
   </nav>
   <div class="payments-list">
     {% for row in rows %}
       <article class="payment-card">
         <div class="payment-top">
-          <div><h3>{{ row.job.plate }} · {{ row.job.vehicle_model }}</h3><p>{{ row.job.customer_name }} · {{ row.job.created_at|date:"d/m/Y H:i" }}</p></div>
+          <div><h3>{{ row.job.plate }} · {{ row.job.vehicle_model }}</h3><p>{{ row.job.customer_name }} · {{ row.job.service_name }}</p><p><i class="fa-regular fa-clock"></i> {{ row.job.created_at|date:"d/m/Y h:i a" }}</p></div>
           <span class="state-pill {% if row.is_paid %}success{% else %}warning{% endif %}">{% if row.is_paid %}Pagado{% else %}Pendiente{% endif %}</span>
         </div>
         <div class="totals">
-          <div><span>Total</span><strong>{{ row.total }}</strong></div>
+          <div><span>Valor del servicio</span><strong>{{ row.total }}</strong></div>
           <div><span>Abonado</span><strong class="green">{{ row.paid }}</strong></div>
-          <div><span>Saldo</span><strong>{{ row.balance }}</strong></div>
+          <div><span>Saldo restante</span><strong class="{% if row.is_paid %}green{% else %}balance-due{% endif %}">{{ row.balance }}</strong></div>
         </div>
         {% if not row.is_paid %}
           <form method="post" action="{% url 'payment_create' row.job.id %}" class="payment-action">
             {% csrf_token %}
-            <label for="method-{{ row.job.id }}">Recibir pago</label>
-            <select id="method-{{ row.job.id }}" name="method" required>
-              <option value="cash">Efectivo</option>
-              <option value="transfer">Transferencia</option>
-              <option value="card">Tarjeta</option>
-            </select>
-            <button class="button primary compact" type="submit">Cobrar {{ row.balance }}</button>
+            <div class="payment-action-details">
+              <label for="method-{{ row.job.id }}">Método de pago</label>
+              <select id="method-{{ row.job.id }}" name="method" required>
+                <option value="cash">Efectivo</option>
+                <option value="transfer">Transferencia</option>
+                <option value="card">Tarjeta</option>
+              </select>
+            </div>
+            <button class="button primary compact" type="submit"><i class="fa-solid fa-money-bill-wave"></i> Registrar pago completo</button>
           </form>
+          <p class="payment-hint">Se registrará el saldo pendiente de {{ row.balance }} en un solo pago.</p>
+        {% else %}
+          <p class="payment-receipt"><i class="fa-solid fa-circle-check"></i> Pago recibido por {{ row.payment_method }}{% if row.payment_date %} el {{ row.payment_date|date:"d/m/Y h:i a" }}{% endif %}</p>
         {% endif %}
       </article>
     {% empty %}

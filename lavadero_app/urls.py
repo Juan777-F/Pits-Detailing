@@ -18,4 +18,5 @@ urlpatterns = [
     path('estadisticas/', views.estadisticas_view, name='estadisticas'),
     path('perfil/', views.perfil_view, name='perfil'),
     path('empleados/', views.employees_view, name='employees'),
+    path('empleados/<int:user_id>/estado/', views.employee_toggle_active_view, name='employee_toggle_active'),
 ]

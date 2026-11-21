@@ -491,6 +491,59 @@ a {
   grid-template-columns: minmax(240px, 430px);
 }
 
+.page-intro {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.payment-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.payment-metric {
+  display: grid;
+  min-height: 115px;
+  align-content: center;
+  gap: 6px;
+  padding: 18px 21px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.payment-metric > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.payment-metric strong {
+  color: var(--ink);
+  font-size: 25px;
+  letter-spacing: -0.04em;
+}
+
+.payment-metric small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.payment-metric.due > span i,
+.payment-metric.due strong {
+  color: var(--amber);
+}
+
+.payment-metric.collected > span i,
+.payment-metric.collected strong {
+  color: var(--green);
+}
+
 .summary-card {
   display: flex;
   min-height: 118px;
@@ -774,6 +827,23 @@ a {
   font-weight: 700;
 }
 
+.tab-button span {
+  display: inline-grid;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 4px;
+  place-items: center;
+  border-radius: 99px;
+  color: #64748b;
+  background: #edf1f5;
+  font-size: 10px;
+}
+
+.tab-button.active span {
+  color: var(--blue-dark);
+  background: var(--blue-pale);
+}
+
 .tab-button.active {
   color: var(--blue-dark);
   background: #fff;
@@ -801,6 +871,11 @@ a {
   font-size: 11px;
 }
 
+.payment-top p + p {
+  margin-top: 5px;
+  font-size: 10px;
+}
+
 .totals {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -825,6 +900,50 @@ a {
 }
 
 .totals strong.green {
+  color: var(--green);
+}
+
+.totals strong.balance-due {
+  color: var(--amber);
+}
+
+.payment-action {
+  align-items: end;
+}
+
+.payment-action-details {
+  display: grid;
+  flex: 1;
+  min-width: 125px;
+  gap: 6px;
+}
+
+.payment-action-details label {
+  color: #435267;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.payment-action-details select {
+  min-height: 38px;
+  font-size: 11px;
+}
+
+.payment-action .button {
+  min-height: 38px;
+}
+
+.payment-hint,
+.payment-receipt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.payment-receipt {
   color: var(--green);
 }
 
@@ -1210,6 +1329,35 @@ a {
   font-size: 12px;
 }
 
+.currency-field {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding-left: 11px;
+  border: 1px solid #dce3e9;
+  border-radius: 8px;
+  color: var(--muted);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.currency-field:focus-within {
+  border-color: #79b9dd;
+  box-shadow: 0 0 0 3px rgb(8 118 185 / 9%);
+}
+
+.field-group .currency-field input {
+  min-width: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.field-help {
+  color: var(--muted);
+  font-size: 10px;
+}
+
 .field-group textarea {
   resize: vertical;
 }
@@ -1361,6 +1509,10 @@ a {
   }
 
   .payments-list {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-metrics {
     grid-template-columns: 1fr;
   }
 }
@@ -2209,6 +2361,11 @@ a {
   display: block;
 }
 
+.employee-details {
+  flex: 1;
+  min-width: 0;
+}
+
 .employee-row strong {
   font-size: 12px;
 }
@@ -2244,6 +2401,7 @@ a {
 }
 
 .payment-action {
+  align-items: flex-end;
   flex-wrap: wrap;
   margin-top: 15px;
 }

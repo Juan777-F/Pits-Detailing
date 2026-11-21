@@ -2,10 +2,35 @@ document.addEventListener('DOMContentLoaded', function () {
   const sidebar = document.getElementById('sidebar');
   const menuToggle = document.querySelector('.menu-toggle');
   const modalBackdrop = document.getElementById('modal-backdrop');
-  const quickAddButton = document.getElementById('quick-add-btn');
   const notificationPanel = document.getElementById('notification-panel');
   const notificationButton = document.querySelector('.notification-button');
   const searchInput = document.getElementById('global-search');
+  const currencyInputs = document.querySelectorAll('[data-currency-input]');
+
+  currencyInputs.forEach(function (input) {
+    input.addEventListener('input', function () {
+      const cursor = input.selectionStart || 0;
+      const digitsBeforeCursor = input.value.slice(0, cursor).replace(/\D/g, '').length;
+      const digits = input.value.replace(/\D/g, '');
+      input.value = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      let nextCursor = 0;
+      let countedDigits = 0;
+      while (nextCursor < input.value.length && countedDigits < digitsBeforeCursor) {
+        if (/\d/.test(input.value[nextCursor])) countedDigits += 1;
+        nextCursor += 1;
+      }
+      input.setSelectionRange(nextCursor, nextCursor);
+    });
+  });
+
+  document.querySelectorAll('form').forEach(function (form) {
+    form.addEventListener('submit', function () {
+      form.querySelectorAll('[data-currency-input]').forEach(function (input) {
+        input.value = input.value.replace(/\./g, '');
+      });
+    });
+  });
 
   function setModalOpen(isOpen) {
     if (!modalBackdrop) return;
@@ -44,12 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
       setModalOpen(true);
     });
   });
-
-  if (quickAddButton) {
-    quickAddButton.addEventListener('click', function () {
-      setModalOpen(true);
-    });
-  }
 
   document.querySelectorAll('[data-close]').forEach(function (button) {
     button.addEventListener('click', function () {

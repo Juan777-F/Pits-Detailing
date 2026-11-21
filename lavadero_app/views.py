@@ -1,3 +1,4 @@
+import re
 from datetime import timedelta
 from decimal import Decimal, InvalidOperation
 from functools import wraps
@@ -43,6 +44,21 @@ def money(value):
     return f'$ {value:,.0f}'.replace(',', '.')
 
 
+def local_time(value):
+    formatted = timezone.localtime(value).strftime('%I:%M %p').lower()
+    return formatted.lstrip('0').replace('am', 'a.m.').replace('pm', 'p.m.')
+
+
+def parse_cop_amount(value):
+    value = value.strip().replace('$', '').replace(' ', '')
+    grouped_value = re.fullmatch(r'\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?', value)
+    plain_value = re.fullmatch(r'\d+(?:[,.]\d{1,2})?', value)
+    if not grouped_value and not plain_value:
+        raise InvalidOperation
+    normalized = value.replace('.', '') if grouped_value else value
+    return Decimal(normalized.replace(',', '.'))
+
+
 def dashboard_context(request, employee=False):
     today = timezone.localdate()
     today_jobs = WashJob.objects.filter(created_at__date=today).exclude(
@@ -67,7 +83,7 @@ def dashboard_context(request, employee=False):
         'vehicle_name': job.vehicle_model,
         'owner': job.customer_name,
         'service': job.service_name,
-        'time': timezone.localtime(job.created_at).strftime('%H:%M'),
+        'time': local_time(job.created_at),
         'status': job.get_status_display(),
         'status_kind': {
             WashJob.Status.PENDING: 'warning',
@@ -200,7 +216,7 @@ def job_create_view(request):
     customer_name = request.POST.get('customer_name', '').strip()
     service_name = request.POST.get('service_name', '').strip()
     try:
-        total = Decimal(request.POST.get('total', ''))
+        total = parse_cop_amount(request.POST.get('total', ''))
     except (InvalidOperation, TypeError):
         total = Decimal('0')
     if (
@@ -246,11 +262,24 @@ def job_status_view(request, job_id):
 @role_required()
 def pagos_view(request):
     selected = request.GET.get('estado', 'pendiente')
+    if selected not in ('pendiente', 'pagado'):
+        selected = 'pendiente'
     jobs = WashJob.objects.exclude(status=WashJob.Status.CANCELLED).prefetch_related('payments')
     rows = []
+    pending_count = 0
+    paid_count = 0
+    collected = Decimal('0')
+    outstanding = Decimal('0')
     for job in jobs:
         paid = job.paid_total
         balance = job.balance
+        latest_payment = job.payments.first()
+        collected += paid
+        outstanding += balance
+        if balance:
+            pending_count += 1
+        else:
+            paid_count += 1
         if (selected == 'pagado') != (balance == 0):
             continue
         rows.append({
@@ -259,11 +288,15 @@ def pagos_view(request):
             'balance': money(balance),
             'total': money(job.total),
             'is_paid': balance == 0,
+            'payment_method': latest_payment.get_method_display() if latest_payment else '',
+            'payment_date': latest_payment.created_at if latest_payment else None,
         })
-    outstanding = sum((job.balance for job in jobs), Decimal('0'))
     return render(request, 'lavadero_app/pagos.html', {
         'rows': rows,
         'outstanding_total': money(outstanding),
+        'collected_total': money(collected),
+        'pending_count': pending_count,
+        'paid_count': paid_count,
         'selected_status': selected,
         'page': 'pagos',
     })
@@ -371,3 +404,21 @@ def employees_view(request):
         'employees': User.objects.filter(is_staff=False, is_superuser=False).order_by('first_name'),
         'page': 'empleados',
     })
+
+
+@role_required(admin_only=True)
+def employee_toggle_active_view(request, user_id):
+    if request.method != 'POST':
+        return redirect('employees')
+    User = get_user_model()
+    employee = get_object_or_404(
+        User,
+        pk=user_id,
+        is_staff=False,
+        is_superuser=False,
+    )
+    employee.is_active = not employee.is_active
+    employee.save(update_fields=['is_active'])
+    status = 'activada' if employee.is_active else 'desactivada'
+    messages.success(request, f'Cuenta de {employee.username} {status}.')
+    return redirect('employees')

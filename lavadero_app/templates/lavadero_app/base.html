@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Piets Lavado{% endblock %}</title>
+    <title>{% block title %}Pits Detailing{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -17,7 +17,7 @@
         <div class="brand-block">
           <div class="brand-icon">P</div>
           <div class="brand-copy">
-            <h2>Piets Lavado</h2>
+            <h2>Pits Detailing</h2>
             <small>GESTIÓN DEL AUTOLAVADO</small>
           </div>
         </div>
@@ -77,7 +77,7 @@
             </button>
             <div>
               <span class="eyebrow">{% if request.user.is_staff or request.user.is_superuser %}Panel de administración{% else %}Panel de empleado{% endif %}</span>
-              <h1>{% block page_title %}Piets Lavado{% endblock %}</h1>
+              <h1>{% block page_title %}Pits Detailing{% endblock %}</h1>
             </div>
           </div>
 
@@ -112,12 +112,6 @@
         </main>
       </div>
     </div>
-
-    {% if page != 'empleados' %}
-      <button class="floating-action" id="quick-add-btn" type="button" aria-label="Registrar un vehículo">
-        <i class="fa-solid fa-plus"></i>
-      </button>
-    {% endif %}
 
     <aside class="notification-panel" id="notification-panel" aria-live="polite">
       <div class="panel-header">
@@ -169,7 +163,11 @@
           </div>
           <div class="field-group">
             <label for="job-total">Valor del servicio (COP)</label>
-            <input id="job-total" name="total" type="number" min="1" step="1000" required />
+            <div class="currency-field">
+              <span aria-hidden="true">$</span>
+              <input id="job-total" name="total" type="text" inputmode="numeric" autocomplete="off" placeholder="0" data-currency-input aria-describedby="job-total-help" required />
+            </div>
+            <small id="job-total-help" class="field-help">Escribe el valor en pesos; los puntos de miles se agregan automáticamente.</small>
           </div>
 
           <div class="modal-actions">

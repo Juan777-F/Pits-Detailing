@@ -1,6 +1,6 @@
 {% extends 'lavadero_app/base.html' %}
 
-{% block title %}Empleados | Piets Lavado{% endblock %}
+{% block title %}Empleados | Pits Detailing{% endblock %}
 {% block page_title %}Empleados{% endblock %}
 
 {% block content %}
@@ -21,7 +21,14 @@
       <div><span class="kicker">Equipo</span><h2>Cuentas de empleado</h2></div>
       <div class="employee-list">
         {% for employee in employees %}
-          <div class="employee-row"><span class="avatar">{{ employee.first_name|default:employee.username|slice:":1"|upper }}</span><span><strong>{{ employee.get_full_name|default:employee.username }}</strong><small>@{{ employee.username }} · {% if employee.is_active %}Activo{% else %}Inactivo{% endif %}</small></span></div>
+          <div class="employee-row">
+            <span class="avatar">{{ employee.first_name|default:employee.username|slice:":1"|upper }}</span>
+            <span class="employee-details"><strong>{{ employee.get_full_name|default:employee.username }}</strong><small>@{{ employee.username }} · {% if employee.is_active %}Activo{% else %}Inactivo{% endif %}</small></span>
+            <form method="post" action="{% url 'employee_toggle_active' employee.id %}">
+              {% csrf_token %}
+              <button class="button compact {% if employee.is_active %}danger{% else %}secondary{% endif %}" type="submit">{% if employee.is_active %}Desactivar{% else %}Activar{% endif %}</button>
+            </form>
+          </div>
         {% empty %}
           <p class="empty-state">Todavía no hay cuentas de empleado.</p>
         {% endfor %}

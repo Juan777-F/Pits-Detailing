@@ -1,6 +1,6 @@
 {% extends 'lavadero_app/base.html' %}
 
-{% block title %}Mi perfil | Piets Lavado{% endblock %}
+{% block title %}Mi perfil | Pits Detailing{% endblock %}
 {% block page_title %}Mi perfil{% endblock %}
 
 {% block content %}
@@ -20,6 +20,7 @@
       <a href="{% url 'jornada' %}"><i class="fa-solid fa-car-side"></i> Jornada y vehículos <span class="arrow">›</span></a>
       <a href="{% url 'pagos' %}"><i class="fa-solid fa-wallet"></i> Pagos <span class="arrow">›</span></a>
       {% if is_admin %}<a href="{% url 'estadisticas' %}"><i class="fa-solid fa-chart-line"></i> Estadísticas <span class="arrow">›</span></a>{% endif %}
+      {% if is_admin %}<a href="{% url 'employees' %}"><i class="fa-solid fa-users"></i> Gestionar empleados <span class="arrow">›</span></a>{% endif %}
     </nav>
     <form method="post" action="{% url 'logout' %}">
       {% csrf_token %}

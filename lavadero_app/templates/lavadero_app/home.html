@@ -1,7 +1,7 @@
 {% extends 'lavadero_app/base.html' %}
 
-{% block title %}Panel | Piets Lavado{% endblock %}
-{% block page_title %}{% if is_employee %}Panel del empleado{% else %}Piets Lavado{% endif %}{% endblock %}
+{% block title %}Panel | Pits Detailing{% endblock %}
+{% block page_title %}{% if is_employee %}Panel del empleado{% else %}Pits Detailing{% endif %}{% endblock %}
 
 {% block content %}
 <section class="page-shell dashboard-page">
@@ -48,10 +48,12 @@
   <div class="quick-access">
     <h3>Accesos rápidos</h3>
     <div class="quick-grid">
-      <button class="quick-card primary" type="button" data-open-modal><i class="fa-solid fa-plus"></i><span>Registrar vehículo</span></button>
       <a class="quick-card" href="{% url 'jornada' %}"><i class="fa-solid fa-calendar-check"></i><span>Ver jornada</span></a>
       <a class="quick-card" href="{% url 'pagos' %}"><i class="fa-solid fa-money-bill-wave"></i><span>Registrar pago</span></a>
-      {% if not is_employee %}<a class="quick-card" href="{% url 'estadisticas' %}"><i class="fa-solid fa-chart-column"></i><span>Estadísticas</span></a>{% endif %}
+      {% if not is_employee %}
+        <a class="quick-card" href="{% url 'estadisticas' %}"><i class="fa-solid fa-chart-column"></i><span>Estadísticas</span></a>
+        <a class="quick-card" href="{% url 'employees' %}"><i class="fa-solid fa-users"></i><span>Gestionar empleados</span></a>
+      {% endif %}
     </div>
   </div>
 

@@ -1,6 +1,6 @@
 {% extends 'lavadero_app/base.html' %}
 
-{% block title %}Jornada | Piets Lavado{% endblock %}
+{% block title %}Jornada | Pits Detailing{% endblock %}
 {% block page_title %}Jornada{% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
           <span class="state-pill {% if job.status == 'completed' %}success{% elif job.status == 'in_progress' %}info{% else %}warning{% endif %}">{{ job.get_status_display }}</span>
         </div>
         <div class="meta-row">
-          <span><i class="fa-regular fa-clock"></i> {{ job.created_at|date:"d/m/Y H:i" }} · {{ job.service_name }}</span>
+          <span><i class="fa-regular fa-clock"></i> {{ job.created_at|date:"d/m/Y h:i a" }} · {{ job.service_name }}</span>
           <span>{{ job.vehicle_type }}</span>
         </div>
         <div class="cash-row">
