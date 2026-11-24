@@ -178,6 +178,28 @@
       </div>
     </div>
 
+    {% if show_startup_animation %}
+      <div class="login-startup-screen" data-startup-overlay hidden aria-hidden="true">
+        <div class="startup-bubble-field" aria-hidden="true">
+          <span class="startup-bubble bubble-a"></span>
+          <span class="startup-bubble bubble-b"></span>
+          <span class="startup-bubble bubble-c"></span>
+          <span class="startup-bubble bubble-d"></span>
+          <span class="startup-bubble bubble-e"></span>
+          <span class="startup-bubble bubble-f"></span>
+          <span class="startup-drop startup-drop-a"></span>
+          <span class="startup-drop startup-drop-b"></span>
+          <span class="startup-drop startup-drop-c"></span>
+        </div>
+        <div class="login-startup-scene">
+          <div class="startup-car" aria-hidden="true">
+            <img src="{% static 'lavadero_app/images/login-car-mascot.png' %}" alt="" />
+          </div>
+          <p class="startup-message">Preparando tu espacio de trabajo</p>
+        </div>
+      </div>
+    {% endif %}
+
     <div id="toast-container" aria-live="assertive" aria-atomic="true"></div>
 
     {% block modal %}{% endblock %}

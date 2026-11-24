@@ -41,6 +41,32 @@ class ApplicationWorkflowTests(TestCase):
         })
         self.assertRedirects(response, reverse('employee_dashboard'))
 
+    def test_login_animation_only_follows_successful_authentication(self):
+        response = self.client.post(reverse('login'), {
+            'role': 'admin',
+            'username': self.admin.username,
+            'password': 'IncorrectPassword!123',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Usuario o contraseña incorrectos.')
+        self.assertNotContains(response, 'data-startup-overlay')
+
+        response = self.client.post(reverse('login'), {
+            'role': 'admin',
+            'username': self.admin.username,
+            'password': 'SecureAdminPass!934',
+        })
+        self.assertRedirects(
+            response,
+            reverse('admin_dashboard'),
+            fetch_redirect_response=False,
+        )
+
+        dashboard = self.client.get(reverse('admin_dashboard'))
+        self.assertContains(dashboard, 'data-startup-overlay')
+        next_dashboard = self.client.get(reverse('admin_dashboard'))
+        self.assertNotContains(next_dashboard, 'data-startup-overlay')
+
     def test_role_permissions_and_employee_creation(self):
         self.login_as('employee')
         response = self.client.get(reverse('estadisticas'))

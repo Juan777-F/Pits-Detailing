@@ -1890,6 +1890,157 @@ a {
   place-items: center;
 }
 
+.hero-cleaning-field {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+.hero-bubble,
+.hero-water-drop {
+  position: absolute;
+  display: block;
+}
+
+.hero-bubble {
+  border: 1px solid rgb(194 235 252 / 55%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 31% 27%, rgb(255 255 255 / 92%) 0 4%, transparent 5%),
+    radial-gradient(circle at 70% 72%, rgb(255 255 255 / 15%), transparent 44%),
+    rgb(184 228 247 / 12%);
+  box-shadow:
+    inset 4px 5px 9px rgb(255 255 255 / 38%),
+    0 8px 22px rgb(0 24 41 / 8%);
+  animation: hero-bubble-bounce 5.5s ease-in-out infinite alternate;
+}
+
+.hero-bubble-one {
+  width: 68px;
+  height: 68px;
+  left: 8%;
+  top: 14%;
+  animation-delay: -1.5s;
+}
+
+.hero-bubble-two {
+  width: 28px;
+  height: 28px;
+  right: 9%;
+  top: 22%;
+  animation-delay: -3.2s;
+  animation-duration: 4.8s;
+}
+
+.hero-bubble-three {
+  width: 46px;
+  height: 46px;
+  left: 18%;
+  bottom: 16%;
+  animation-delay: -2.4s;
+  animation-duration: 6.2s;
+}
+
+.hero-bubble-four {
+  width: 18px;
+  height: 18px;
+  right: 30%;
+  bottom: 11%;
+  animation-delay: -4.1s;
+  animation-duration: 4.6s;
+}
+
+.hero-bubble-five {
+  width: 22px;
+  height: 22px;
+  left: 43%;
+  top: 7%;
+  animation-delay: -0.8s;
+  animation-duration: 5.1s;
+}
+
+.hero-water-drop {
+  width: 32px;
+  height: 40px;
+  overflow: hidden;
+  border: 1.5px solid rgb(207 240 253 / 78%);
+  border-radius: 58% 58% 64% 64%;
+  background: rgb(255 255 255 / 12%);
+  box-shadow:
+    inset 3px 4px 7px rgb(255 255 255 / 24%),
+    0 8px 18px rgb(0 24 41 / 12%);
+  transform: rotate(45deg);
+  animation: hero-drop-bounce 2.4s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+
+.hero-water-drop::before {
+  content: "";
+  position: absolute;
+  right: -20%;
+  bottom: -1px;
+  left: -20%;
+  height: 50%;
+  border-radius: 50% 50% 0 0;
+  background: linear-gradient(180deg, rgb(151 213 239 / 76%), rgb(66 162 205 / 88%));
+  box-shadow: inset 0 3px 5px rgb(220 247 255 / 28%);
+  animation: hero-drop-water 2.4s ease-in-out infinite alternate;
+}
+
+.hero-water-drop::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  width: 5px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 72%);
+  transform: rotate(-45deg);
+}
+
+.hero-drop-one {
+  top: 29%;
+  right: 8%;
+}
+
+.hero-drop-two {
+  bottom: 26%;
+  left: 7%;
+  width: 24px;
+  height: 30px;
+  animation-delay: -0.9s;
+  animation-duration: 2.15s;
+}
+
+.hero-drop-three {
+  top: 9%;
+  left: 36%;
+  width: 20px;
+  height: 25px;
+  animation-delay: -1.6s;
+  animation-duration: 2.05s;
+}
+
+@keyframes hero-bubble-bounce {
+  0% { transform: translate3d(0, 9px, 0) scale(.96); }
+  55% { transform: translate3d(7px, -12px, 0) scale(1.04); }
+  100% { transform: translate3d(-4px, -24px, 0) scale(1); }
+}
+
+@keyframes hero-drop-bounce {
+  0%, 100% { margin-top: 0; }
+  45% { margin-top: -13px; }
+  70% { margin-top: -4px; }
+}
+
+@keyframes hero-drop-water {
+  from { height: 47%; }
+  to { height: 53%; }
+}
+
 .hero-orbit {
   position: absolute;
   width: min(34vw, 400px);
@@ -2140,6 +2291,137 @@ a {
     #f2f6f9;
 }
 
+.cleaning-login {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 18%, rgb(55 181 229 / 10%), transparent 20%),
+    radial-gradient(circle at 12% 82%, rgb(8 118 185 / 8%), transparent 24%),
+    linear-gradient(145deg, #f8fbfd 0%, #eef5fa 58%, #e5f1f7 100%);
+}
+
+.cleaning-login::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  width: 520px;
+  height: 520px;
+  right: -260px;
+  bottom: -300px;
+  border: 1px solid rgb(8 118 185 / 10%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 48px rgb(255 255 255 / 18%),
+    0 0 0 96px rgb(8 118 185 / 4%);
+}
+
+.login-bubble-field {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bubble,
+.water-drop {
+  position: absolute;
+  display: block;
+}
+
+.bubble {
+  border: 1px solid rgb(89 169 209 / 38%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 95%) 0 5%, transparent 6%),
+    radial-gradient(circle at 68% 72%, rgb(255 255 255 / 18%), transparent 42%),
+    rgb(173 220 239 / 12%);
+  box-shadow:
+    inset 4px 5px 9px rgb(255 255 255 / 60%),
+    0 8px 22px rgb(34 116 160 / 8%);
+  animation: login-bubble-rise 8s ease-in-out infinite alternate;
+}
+
+.bubble-one { width: 82px; height: 82px; left: 7%; bottom: 14%; animation-duration: 9s; }
+.bubble-two { width: 34px; height: 34px; left: 18%; top: 12%; animation-delay: -3s; animation-duration: 7s; }
+.bubble-three { width: 118px; height: 118px; right: 7%; top: 8%; animation-delay: -5s; animation-duration: 11s; }
+.bubble-four { width: 46px; height: 46px; right: 26%; bottom: 9%; animation-delay: -1s; animation-duration: 8s; }
+.bubble-five { width: 22px; height: 22px; left: 29%; bottom: 24%; animation-delay: -6s; animation-duration: 6s; }
+.bubble-six { width: 64px; height: 64px; left: 3%; top: 42%; animation-delay: -2s; animation-duration: 10s; }
+.bubble-seven { width: 28px; height: 28px; right: 19%; top: 52%; animation-delay: -4s; animation-duration: 7.5s; }
+.bubble-eight { width: 16px; height: 16px; left: 42%; top: 8%; animation-delay: -1.5s; animation-duration: 5.5s; }
+
+.water-drop {
+  width: 22px;
+  height: 28px;
+  overflow: hidden;
+  border: 1px solid rgb(75 158 202 / 32%);
+  border-radius: 58% 58% 64% 64%;
+  background: rgb(255 255 255 / 72%);
+  box-shadow: 0 6px 14px rgb(25 112 157 / 10%);
+  transform: rotate(45deg);
+  animation: login-drop-bounce 2.6s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+
+.water-drop::before,
+.startup-drop::before {
+  content: "";
+  position: absolute;
+  right: -20%;
+  bottom: -1px;
+  left: -20%;
+  height: 50%;
+  border-radius: 50% 50% 0 0;
+  background: linear-gradient(180deg, rgb(151 213 239 / 78%), rgb(66 162 205 / 88%));
+}
+
+.water-drop::after,
+.startup-drop::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 4px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 78%);
+  transform: rotate(-45deg);
+}
+
+.drop-one { left: 12%; top: 31%; }
+.drop-two { right: 11%; bottom: 24%; animation-delay: -0.8s; transform: scale(.72) rotate(45deg); }
+.drop-three { left: 34%; bottom: 8%; animation-delay: -1.5s; transform: scale(.55) rotate(45deg); }
+
+.login-brand,
+.login-card,
+.back-home {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes login-bubble-rise {
+  0% { transform: translate3d(0, 12px, 0) scale(.96); }
+  55% { transform: translate3d(8px, -18px, 0) scale(1.04); }
+  100% { transform: translate3d(-5px, -32px, 0) scale(1); }
+}
+
+@keyframes login-drop-float {
+  from { margin-top: 0; opacity: .7; }
+  to { margin-top: -14px; opacity: 1; }
+}
+
+@keyframes login-drop-bounce {
+  0%, 100% { margin-top: 0; }
+  45% { margin-top: -12px; }
+  70% { margin-top: -4px; }
+}
+
+@keyframes startup-bubble-rise {
+  0% { transform: translate3d(0, 16px, 0) scale(.94); }
+  55% { transform: translate3d(10px, -18px, 0) scale(1.05); }
+  100% { transform: translate3d(-6px, -38px, 0) scale(1); }
+}
 .login-shell {
   display: flex;
   min-height: 100vh;
@@ -2282,6 +2564,176 @@ a {
 
 .first-admin-link:hover {
   text-decoration: underline;
+}
+
+.login-startup-screen[hidden] {
+  display: none;
+}
+
+body.startup-active {
+  overflow: hidden;
+}
+
+.login-startup-screen {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  background:
+    radial-gradient(circle at 78% 20%, rgb(55 181 229 / 12%), transparent 21%),
+    linear-gradient(145deg, #fafdff 0%, #eef6fa 64%, #e4f1f7 100%);
+}
+
+.startup-bubble-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.startup-bubble,
+.startup-drop {
+  position: absolute;
+  display: block;
+}
+
+.startup-bubble {
+  border: 1px solid rgb(82 166 207 / 38%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 95%) 0 5%, transparent 6%),
+    rgb(173 220 239 / 13%);
+  box-shadow:
+    inset 5px 6px 10px rgb(255 255 255 / 72%),
+    0 10px 25px rgb(34 116 160 / 9%);
+  animation: startup-bubble-rise 6s ease-in-out infinite alternate;
+}
+
+.bubble-a { width: 150px; height: 150px; left: 4%; bottom: 8%; animation-duration: 8s; }
+.bubble-b { width: 52px; height: 52px; left: 22%; top: 11%; animation-delay: -2s; }
+.bubble-c { width: 86px; height: 86px; right: 9%; top: 14%; animation-delay: -4s; animation-duration: 7s; }
+.bubble-d { width: 28px; height: 28px; right: 24%; bottom: 18%; animation-delay: -1s; }
+.bubble-e { width: 44px; height: 44px; left: 35%; bottom: 8%; animation-delay: -5s; animation-duration: 5s; }
+.bubble-f { width: 18px; height: 18px; right: 34%; top: 26%; animation-delay: -3s; animation-duration: 4.5s; }
+
+.startup-drop {
+  width: 22px;
+  height: 28px;
+  overflow: hidden;
+  border: 1px solid rgb(75 158 202 / 32%);
+  border-radius: 58% 58% 64% 64%;
+  background: rgb(255 255 255 / 72%);
+  box-shadow: 0 8px 16px rgb(25 112 157 / 9%);
+  transform: rotate(45deg);
+  animation: login-drop-bounce 2.6s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+
+.startup-drop-a { left: 12%; top: 28%; }
+.startup-drop-b { right: 16%; bottom: 25%; animation-delay: -2s; transform: scale(.7) rotate(45deg); }
+.startup-drop-c { left: 29%; top: 18%; animation-delay: -3s; transform: scale(.5) rotate(45deg); }
+
+.login-startup-scene {
+  z-index: 2;
+}
+
+.login-startup-scene {
+  position: relative;
+  display: grid;
+  width: min(1120px, 100vw);
+  align-content: center;
+  justify-items: center;
+  padding: 20px 16px;
+}
+
+.startup-car {
+  position: relative;
+  width: min(940px, 94vw, 156vh);
+  z-index: 1;
+  animation: startup-car-arrive 3s cubic-bezier(.16, .76, .22, 1) both;
+}
+
+.startup-car img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.startup-message {
+  z-index: 1;
+  margin: 14px 0 0;
+  color: #426076;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  animation: startup-message-arrive .45s ease-out .75s both;
+}
+
+@keyframes startup-car-arrive {
+  from {
+    opacity: 0;
+    transform: translateX(-125vw) scale(.8);
+  }
+
+  58% {
+    opacity: 1;
+    transform: translateX(8%) scale(1.03);
+  }
+
+  82% {
+    transform: translateX(-2%) scale(1);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .startup-car {
+    animation-name: startup-car-arrive-reduced;
+    animation-duration: .45s;
+  }
+
+  .startup-message {
+    animation-duration: .2s;
+    animation-delay: .1s;
+  }
+
+  .startup-bubble,
+  .startup-drop,
+  .hero-bubble,
+  .hero-water-drop,
+  .bubble,
+  .water-drop {
+    animation: none;
+  }
+}
+
+@keyframes startup-car-arrive-reduced {
+  from {
+    opacity: 0;
+    transform: translateX(-18vw) scale(.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes startup-message-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .back-home {

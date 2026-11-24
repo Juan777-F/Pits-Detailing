@@ -101,6 +101,7 @@ def dashboard_context(request, employee=False):
         'income_today': money(income),
         'outstanding_total': money(outstanding),
         'job_count': jobs.count(),
+        'show_startup_animation': request.session.pop('show_startup_animation', False),
     }
 
 
@@ -160,6 +161,7 @@ def login_view(request):
             messages.error(request, 'Selecciona Administrador para esta cuenta.')
         else:
             login(request, user)
+            request.session['show_startup_animation'] = True
             return redirect(panel_url(user))
     return render(request, 'lavadero_app/login.html', {
         'selected_role': selected_role,

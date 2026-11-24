@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const notificationButton = document.querySelector('.notification-button');
   const searchInput = document.getElementById('global-search');
   const currencyInputs = document.querySelectorAll('[data-currency-input]');
+  const startupOverlay = document.querySelector('[data-startup-overlay]');
 
   currencyInputs.forEach(function (input) {
     input.addEventListener('input', function () {
@@ -31,6 +32,18 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
+
+  if (startupOverlay) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    startupOverlay.hidden = false;
+    startupOverlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('startup-active');
+
+    window.setTimeout(function () {
+      startupOverlay.hidden = true;
+      document.body.classList.remove('startup-active');
+    }, prefersReducedMotion ? 450 : 3000);
+  }
 
   function setModalOpen(isOpen) {
     if (!modalBackdrop) return;
